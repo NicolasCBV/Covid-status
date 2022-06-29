@@ -55,7 +55,7 @@ export function Graphic({ dataApi }: props) {
     datasets: [
       {
         label: "Deaths",
-        data: Object.values(dataApi.cases).map((item) => {return item}),
+        data: Object.values(dataApi.deaths).map((item) => {return item}),
         borderColor: '#151513',
         backgroundColor: 'rgba(5, 5, 5, 0.5)',
       }
