@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  overflow-x: hidden;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-areas: 'graphic' 'information';
+  grid-template-rows: clamp(10rem, 50%, 40rem), clamp(5rem, 50%, 60rem);
+}
+
+#graphic {
+  grid-area: graphic;
+  width: clamp(5rem, 70vw, 50rem);
+}
+
+#information {
+  grid-area: information;
+}
