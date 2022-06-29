@@ -10,17 +10,17 @@ export function Information() {
       </p>
       <ul className="flex gap-2 justify-center">
         <li>
-          <a href="https://www.instagram.com/orix304">
+          <a href="https://www.instagram.com/orix304" target="_blank">
             <InstagramLogo weight="bold" width="35" height="35"/>
           </a>
         </li>
         <li>
-          <a href="https://www.youtube.com/channel/UCt5BZdVGuRVV0vg6om92bwA">
+          <a href="https://www.youtube.com/channel/UCt5BZdVGuRVV0vg6om92bwA" target="_blank">
             <YoutubeLogo weight="bold" width="35" height="35"/>
           </a>
         </li>
         <li>
-          <a href="https://www.twitter.com/NcolasCleiton1">
+          <a href="https://www.twitter.com/NcolasCleiton1" target="_blank">
             <TwitterLogo weight="bold" width="35" height="35"/>
           </a>
         </li>
