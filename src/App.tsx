@@ -9,41 +9,40 @@ export interface dataApi {
   timeline: {
     cases: {
       date: number
-    }
+    },
     deaths: {
       date: number
-    }
+    },
     recovered: {
       date: number
-    }
+    },
   }
 }
 
 export interface timeline {
-    cases: {
-      date: number
-    }
-    deaths: {
-      date: number
-    }
-    recovered: {
-      date: number
-    }
-}
-
-const shell = {
   cases: {
-    date: 0
+    date: number
   },
   deaths: {
-    date: 0
+    date: number
   },
   recovered: {
-    date: 0
-  }
+    date: number
+  },
 }
+
+export interface covidStatusState {
+  cases: number[],
+  deaths: number[],
+  date: (string | undefined)[]
+}
+
 export default function App(){
-  const [covidStatus, setCovidStatus] = useState<timeline>(shell);
+  const [covidStatus, setCovidStatus] = useState<covidStatusState>({
+    cases: [0],
+    deaths: [0],
+    date: [""]
+  });
 
   useEffect(() => {
     fetch(
@@ -55,10 +54,18 @@ export default function App(){
         method: "GET"
       }
     ).then((res) => res.json()).then(({ timeline }: dataApi) => {
+      const date = Object.entries(timeline.cases).filter((item, index) => {
+        return Object.values(timeline.cases).indexOf(item[1]) === index
+      })
+
       setCovidStatus({
-        cases: timeline.cases,
-        deaths: timeline.deaths, 
-        recovered: timeline.recovered
+        cases: Object.values(timeline.cases).filter((item, index) => {
+          return Object.values(timeline.cases).indexOf(item) === index;
+        }),
+        deaths: Object.values(timeline.deaths).filter((item, index) => {
+          return Object.values(timeline.deaths).indexOf(item) === index;
+        }), 
+        date: date.map((item) => {return item[0]})
       });
     })
   },[])

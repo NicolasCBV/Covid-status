@@ -10,8 +10,8 @@ import {
 } from 'chart.js'
 import { useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { timeline } from "../App";
-import { Skull, Heartbeat } from "phosphor-react";
+import { covidStatusState } from "../App";
+import { Skull, Heartbeat, Equals, Database } from "phosphor-react";
 
 Chart.register(
   CategoryScale, 
@@ -25,8 +25,9 @@ Chart.register(
 )
 
 interface props {
-  dataApi: timeline
+  dataApi: covidStatusState
 }
+
 
 
 export function Graphic({ dataApi }: props) {
@@ -36,31 +37,48 @@ export function Graphic({ dataApi }: props) {
   })
   
   const [switchGraphicForDeathState, setSwitchGraphicForDeathState] = useState(false);
-  const dates = Object.keys(dataApi.cases).map((item) => {return item})
+
+
+  const casesDiff: number[] = Object.values(dataApi.cases).map((item, index, arrayOfCases) => {
+    const indexOfPreviousItem = Object.values(dataApi.cases).indexOf(item) - 1;
+    const valueOfPreviousItem = arrayOfCases[indexOfPreviousItem];
+    return item - valueOfPreviousItem;
+  });
+  casesDiff.shift();
+
+  const deathsDiff: number[] = Object.values(dataApi.cases).map((item, index, arrayOfDeaths) => {
+    const indexOfPreviousItem = Object.values(dataApi.cases).indexOf(item) - 1;
+    const valueOfPreviousItem = arrayOfDeaths[indexOfPreviousItem];
+    return item - valueOfPreviousItem;
+  })
+  deathsDiff.shift();
+
+  const [diffButtonState, setDiffButtonState] = useState(false);
 
   const casesData = {
-    labels: dates,
+    labels: !diffButtonState ? dataApi.date : dataApi.date.slice(1, dataApi.cases.length),
     datasets: [
       {
-        label: "Cases",
-        data: Object.values(dataApi.cases).map((item) => {return item}),
-        borderColor: 'rgb(255, 10, 67)',
-        backgroundColor: 'rgba(255, 16, 10, 0.5)',
+        label: !diffButtonState ? "Casos - Total" : "Casos - Comparação",
+        data: !diffButtonState ? dataApi.cases : casesDiff,
+        borderColor: !diffButtonState ? 'rgb(255, 10, 67)' : 'rgb(247, 88, 36)',
+        backgroundColor: !diffButtonState ? 'rgba(255, 16, 10, 0.5)' : 'rgb(237,140, 8)',
       }
     ]
   }
 
   const deathsData = {
-    labels: dates,
+    labels: !diffButtonState ? dataApi.date : dataApi.date.slice(1, dataApi.cases.length),
     datasets: [
       {
-        label: "Deaths",
-        data: Object.values(dataApi.cases).map((item) => {return item}),
-        borderColor: '#151513',
-        backgroundColor: 'rgba(5, 5, 5, 0.5)',
+        label: !diffButtonState ? "Mortes - Total" : "Mortes - Comparação",
+        data: !diffButtonState ? dataApi.deaths : deathsDiff,
+        borderColor: !diffButtonState ? '#151513' : '#757575',
+        backgroundColor: !diffButtonState ? 'rgba(5, 5, 5, 0.5)' : 'rgba(75, 75, 75, 0.5)',
       }
     ]
   }
+
   return (
     <div id="graphic" className='py-400 items-center place-self-center m-auto bg-white'>
     {
@@ -81,6 +99,7 @@ export function Graphic({ dataApi }: props) {
           }
         }}
       />
+      <div className='flex'>
         <button 
           className='bg-blackOliva-150 px-2 py-1 rounded-md text-queenBlue-900 flex items-center gap-1 mx-auto duration-300 hover:transition-all hover:bg-blackOliva-250'
           onClick={()=>{setSwitchGraphicForDeathState(!switchGraphicForDeathState)}}
@@ -88,6 +107,14 @@ export function Graphic({ dataApi }: props) {
           <Skull/>
             Mortes
         </button>
+        <button
+          className='bg-red-600 px-2 py-1 rounded-md text-queenBlue-900 flex items-center gap-1 mx-auto duration-300 hover:bg-red-500 hover:transition-all'
+          onClick={()=>{setDiffButtonState(!diffButtonState)}}
+        >
+          {!diffButtonState ?<Equals/> : <Database/>}
+          {!diffButtonState ? "Comparação": "Dados totais"}
+        </button>
+      </div>
       </>
      ): (
       <>
@@ -103,13 +130,22 @@ export function Graphic({ dataApi }: props) {
             }
           }
         }} data={deathsData}/>
-        <button 
-          className='bg-red-600 px-2 py-1 rounded-md text-queenBlue-900 flex items-center gap-1 mx-auto duration-300 hover:bg-red-500 hover:transition-all'
-          onClick={()=>{setSwitchGraphicForDeathState(!switchGraphicForDeathState)}}
-        >
-          <Heartbeat/>
-            Casos
-        </button>
+        <div className='flex'>
+          <button 
+            className='bg-red-600 px-2 py-1 rounded-md text-queenBlue-900 flex items-center gap-1 mx-auto duration-300 hover:bg-red-500 hover:transition-all'
+            onClick={()=>{setSwitchGraphicForDeathState(!switchGraphicForDeathState)}}
+          >
+            <Heartbeat/>
+              Casos
+          </button>
+          <button 
+            className='bg-blackOliva-150 px-2 py-1 rounded-md text-queenBlue-900 flex items-center gap-1 mx-auto duration-300 hover:transition-all hover:bg-blackOliva-250'
+            onClick={()=>{setDiffButtonState(!diffButtonState)}}
+          >
+            {!diffButtonState ?<Equals/> : <Database/>}
+            {!diffButtonState ? "Comparação": "Dados totais"}
+          </button>
+        </div>
       </>
      )
     }
