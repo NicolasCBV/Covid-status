@@ -46,8 +46,8 @@ export function Graphic({ dataApi }: props) {
   });
   casesDiff.shift();
 
-  const deathsDiff: number[] = Object.values(dataApi.cases).map((item, index, arrayOfDeaths) => {
-    const indexOfPreviousItem = Object.values(dataApi.cases).indexOf(item) - 1;
+  const deathsDiff: number[] = Object.values(dataApi.deaths).map((item, index, arrayOfDeaths) => {
+    const indexOfPreviousItem = Object.values(dataApi.deaths).indexOf(item) - 1;
     const valueOfPreviousItem = arrayOfDeaths[indexOfPreviousItem];
     return item - valueOfPreviousItem;
   })
