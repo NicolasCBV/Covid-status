@@ -143,7 +143,7 @@ export function Graphic({ dataApi }: props) {
             onClick={()=>{setDiffButtonState(!diffButtonState)}}
           >
             {!diffButtonState ?<Equals/> : <Database/>}
-            {!diffButtonState ? "Comparação": "Dados totais"}
+            {!diffButtonState ? "Comparação": "Todos os dados"}
           </button>
         </div>
       </>
