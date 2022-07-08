@@ -56,7 +56,7 @@ export default function App(){
     ).then((res) => res.json()).then(({ timeline }: dataApi) => {
       const date = Object.entries(timeline.cases).filter((item, index) => {
         return Object.values(timeline.cases).indexOf(item[1]) === index
-      })
+      });
 
       setCovidStatus({
         cases: Object.values(timeline.cases).filter((item, index) => {
