@@ -15,12 +15,7 @@ export function Information() {
           </a>
         </li>
         <li>
-          <a href="https://www.youtube.com/channel/UCt5BZdVGuRVV0vg6om92bwA" target="_blank">
-            <YoutubeLogo weight="bold" width="35" height="35"/>
-          </a>
-        </li>
-        <li>
-          <a href="https://www.twitter.com/NcolasCleiton1" target="_blank">
+          <a href="https://github.com/NicolasCBV" target="_blank">
             <TwitterLogo weight="bold" width="35" height="35"/>
           </a>
         </li>
