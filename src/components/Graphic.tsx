@@ -10,7 +10,7 @@ import {
 } from 'chart.js'
 import { useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { covidStatusState } from "../App";
+import { ICovidStatusState } from "../App";
 import { Skull, Heartbeat, Equals, Database } from "phosphor-react";
 
 Chart.register(
@@ -22,59 +22,98 @@ Chart.register(
   Title,
   Tooltip, 
   Legend
-)
+);
 
 interface props {
-  dataApi: covidStatusState
+  dataApi: ICovidStatusState;
 }
 
-
-
 export function Graphic({ dataApi }: props) {
-  const [aspectRatio, setAspectRatio] = useState(window.innerWidth >= 617 ? 2 : 1);
+  const [aspectRatio, setAspectRatio] = useState(
+    window.innerWidth >= 617 
+      ? 2 
+      : 1);
+
   window.addEventListener("resize", () => {
-    window.innerWidth >= 617 ? setAspectRatio(2) : setAspectRatio(1)  
+    window.innerWidth >= 617 
+      ? setAspectRatio(2) 
+      : setAspectRatio(1);
   })
   
-  const [switchGraphicForDeathState, setSwitchGraphicForDeathState] = useState(false);
+  const [
+    switchGraphicForDeathState, 
+    setSwitchGraphicForDeathState
+  ] = useState(false);
 
 
-  const casesDiff: number[] = Object.values(dataApi.cases).map((item, index, arrayOfCases) => {
-    const indexOfPreviousItem = Object.values(dataApi.cases).indexOf(item) - 1;
-    const valueOfPreviousItem = arrayOfCases[indexOfPreviousItem];
-    return item - valueOfPreviousItem;
-  });
+  const casesDiff: number[] = Object
+    .values(dataApi.cases)
+    .map((item, _index, arrayOfCases) => {
+      const indexOfPreviousItem = Object.values(dataApi.cases).indexOf(item) - 1;
+      const valueOfPreviousItem = arrayOfCases[indexOfPreviousItem];
+      return Math.abs(item - valueOfPreviousItem);
+    });
+
   casesDiff.shift();
 
-  const deathsDiff: number[] = Object.values(dataApi.deaths).map((item, index, arrayOfDeaths) => {
-    const indexOfPreviousItem = Object.values(dataApi.deaths).indexOf(item) - 1;
-    const valueOfPreviousItem = arrayOfDeaths[indexOfPreviousItem];
-    return item - valueOfPreviousItem;
-  })
+  const deathsDiff: number[] = Object
+    .values(dataApi.deaths)
+    .map((item, _index, arrayOfDeaths) => {
+      const indexOfPreviousItem = Object.values(dataApi.deaths).indexOf(item) - 1;
+      const valueOfPreviousItem = arrayOfDeaths[indexOfPreviousItem];
+      return Math.abs(item - valueOfPreviousItem);
+    });
+
   deathsDiff.shift();
 
   const [diffButtonState, setDiffButtonState] = useState(false);
 
   const casesData = {
-    labels: !diffButtonState ? dataApi.date : dataApi.date.slice(1, dataApi.date.length),
+    labels: !diffButtonState 
+      ? dataApi.date.dateOfCases 
+      : dataApi.date.dateOfCases.slice(
+        1, 
+        dataApi.date.dateOfCases.length
+      ),
     datasets: [
       {
-        label: !diffButtonState ? "Casos - Total" : "Casos - Comparação",
-        data: !diffButtonState ? dataApi.cases : casesDiff,
-        borderColor: !diffButtonState ? 'rgb(255, 10, 67)' : 'rgb(5, 25, 215)',
-        backgroundColor: !diffButtonState ? 'rgba(255, 16, 10, 0.5)' : 'rgb(10, 85, 235)',
+        label: !diffButtonState 
+          ? "Casos - Total" 
+          : "Casos - Comparação",
+        data: !diffButtonState 
+          ? dataApi.cases 
+          : casesDiff,
+        borderColor: !diffButtonState 
+          ? 'rgb(255, 10, 67)' 
+          : 'rgb(5, 25, 215)',
+        backgroundColor: !diffButtonState 
+          ? 'rgba(255, 16, 10, 0.5)' 
+          : 'rgb(10, 85, 235)',
       }
     ]
   }
 
   const deathsData = {
-    labels: !diffButtonState ? dataApi.date : dataApi.date.slice(1, dataApi.date.length),
+    labels: !diffButtonState 
+      ? dataApi.date.dateOfDeaths 
+      : dataApi.date.dateOfDeaths.slice(
+        1, 
+        dataApi.date.dateOfDeaths.length
+      ),
     datasets: [
       {
-        label: !diffButtonState ? "Mortes - Total" : "Mortes - Comparação",
-        data: !diffButtonState ? dataApi.deaths : deathsDiff,
-        borderColor: !diffButtonState ? '#151513' : '#757575',
-        backgroundColor: !diffButtonState ? 'rgba(5, 5, 5, 0.5)' : 'rgba(75, 75, 75, 0.5)',
+        label: !diffButtonState 
+          ? "Mortes - Total" 
+          : "Mortes - Comparação",
+        data: !diffButtonState 
+          ? dataApi.deaths 
+          : deathsDiff,
+        borderColor: !diffButtonState 
+          ? '#151513' 
+          : '#757575',
+        backgroundColor: !diffButtonState 
+          ? 'rgba(5, 5, 5, 0.5)' 
+          : 'rgba(75, 75, 75, 0.5)',
       }
     ]
   }
